@@ -9,6 +9,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/componen
 import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp, where } from 'firebase/firestore'
 import { auth, db } from './firebase-config'
 import { SendIcon } from 'lucide-react'
+import { signOut } from 'firebase/auth'
 
 const cookies = new Cookies();
 
@@ -38,6 +39,13 @@ const Page = () => {
   
   const roomInputRef = useRef(null);
 
+  const signUserOut = async () => {
+    await signOut(auth);
+    cookies.remove('auth-token');
+    setIsAuth(false);
+    setRoom(null);
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(newMessage === "") return;
@@ -61,7 +69,7 @@ const Page = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col space-y-10 items-center justify-center min-h-screen bg-gray-100">
       {room ? (
         <Card className="w-full max-w-md" room={room}>
           <CardHeader>
@@ -119,6 +127,9 @@ const Page = () => {
           </CardFooter>
         </Card>
       )}
+      <div>
+        <Button onClick={signUserOut}>Sign Out</Button>
+      </div>
     </div>
   );
 }
