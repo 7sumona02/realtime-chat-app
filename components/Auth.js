@@ -7,6 +7,7 @@ import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { auth, provider } from '@/app/firebase-config'
 import {signInWithPopup} from 'firebase/auth'
 import Cookies from 'universal-cookie'
+import './auth.css'
 const cookies = new Cookies();
 
 export default function Auth(props) {
@@ -37,11 +38,11 @@ export default function Auth(props) {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-md">
+    <div className="flex items-center justify-center min-h-screen w-screen h-72 bg-gradient-to-b from-white to-[#ece9ff]">
+      <div className="w-md p-8 space-y-8 bg-white/30 rounded-2xl border-2 border-neutral-200 glass-card shadow-none">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Sign In</h1>
-          <p className="text-sm text-gray-600">Welcome back! Please enter your details.</p>
+          <p className="text-sm text-[#272727]">Welcome back! Please enter your details.</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* <div className="space-y-2">

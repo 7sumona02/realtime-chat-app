@@ -1,0 +1,4 @@
+.glass-card {
+    backdrop-filter: blur(10px); /* Apply blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Fallback for Safari */
+}

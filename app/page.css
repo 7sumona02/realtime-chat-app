@@ -1,0 +1,10 @@
+.glass-card {
+    backdrop-filter: blur(10px); /* Apply blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Fallback for Safari */
+}
+
+.messages-container {
+    max-height: calc(74.5vh - 150px); /* Adjust this value based on your layout */
+    overflow-y: auto; /* Enables vertical scrolling */
+    margin-bottom: 1rem; /* Adds space below the messages */
+  }

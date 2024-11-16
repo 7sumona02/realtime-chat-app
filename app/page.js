@@ -10,6 +10,7 @@ import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp, where 
 import { auth, db } from './firebase-config'
 import { SendIcon } from 'lucide-react'
 import { signOut } from 'firebase/auth'
+import './page.css'
 
 const cookies = new Cookies();
 
@@ -69,44 +70,44 @@ const Page = () => {
   }
 
   return (
-    <div className="flex flex-col space-y-10 items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col space-y-10 items-center justify-center h-screen bg-gradient-to-b from-white to-[#ece9ff]">
       {room ? (
-        <Card className="w-full max-w-md" room={room}>
+        <Card className="w-[90vw] min-h-[80vh] bg-white/30 rounded-2xl border-2 border-neutral-200 glass-card shadow-none" room={room}>
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-center">Chat Room: {room}</CardTitle>
           </CardHeader>
           <CardContent>
-          <div>
-            {messages.map((message) => (
-              <div key={message.id}>
-                <span className='font-semibold'>{message.user}</span>{" "}
-                {message.text}
-              </div>
-            ))}
-          </div>
-          <form onSubmit={handleSubmit} className="flex items-center space-x-2 p-4 bg-white border-t">
-              <Input
-                type="text"
-                placeholder="Type your message here..."
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                className="flex-grow"
-              />
-              <Button type="submit" size="icon" disabled={!newMessage.trim()}>
-                <SendIcon className="h-4 w-4" />
-                <span className="sr-only">Send message</span>
-              </Button>
-            </form>
-          </CardContent>
+  <div className="messages-container">
+    {messages.map((message) => (
+      <div key={message.id}>
+        <span className='font-semibold'>{message.user}</span>{" "}
+        {message.text}
+      </div>
+    ))}
+  </div>
+  <form onSubmit={handleSubmit} className="flex items-center space-x-2 p-1 bg-white rounded-full absolute bottom-5 right-0 left-0 w-[80vw] mx-auto">
+    <Input
+      type="text"
+      placeholder="Type your message here..."
+      value={newMessage}
+      onChange={(e) => setNewMessage(e.target.value)}
+      className="flex-grow rounded-full h-12 border-none shadow-none"
+    />
+    <Button type="submit" size="icon" className='h-12 w-12 bg-[#ece9ff] hover:bg-[#ece9ff]/90 shadow-none rounded-full' disabled={!newMessage.trim()}>
+      <SendIcon className="h-4 w-4 text-black" />
+      <span className="sr-only">Send message</span>
+    </Button>
+  </form>
+</CardContent>
         </Card>
       ) : (
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md bg-white/30 rounded-2xl border-2 border-neutral-200 glass-card shadow-none">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-center">Enter Chat Room</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <label htmlFor="room-input" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="room-input" className="block text-sm font-medium text-[#272727]">
                 Enter Room Name
               </label>
               <Input 
