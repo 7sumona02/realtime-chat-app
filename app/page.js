@@ -1,13 +1,14 @@
 'use client'
 
 import Auth from '@/components/Auth'
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Cookies from 'universal-cookie'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
+import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp, where } from 'firebase/firestore'
 import { auth, db } from './firebase-config'
+import { SendIcon } from 'lucide-react'
 
 const cookies = new Cookies();
 
@@ -16,8 +17,24 @@ const Page = () => {
   const [room, setRoom] = useState('');
 
   const [newMessage, setNewMessage] = useState('');
+  const [messages, setMessages] = useState([]);
 
   const messagesRef = collection(db, 'messages');
+
+  useEffect(() => {
+    if (!room) return; 
+
+    const queryMessages = query(messagesRef, where('room', '==', room), orderBy('createdAt'));
+    const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
+      let messages = [];
+      snapshot.forEach((doc) => {
+        messages.push({ ...doc.data(), id: doc.id });
+      });
+      setMessages(messages);
+    });
+
+    return () => unsubscribe();
+  }, [room]);
   
   const roomInputRef = useRef(null);
 
@@ -51,9 +68,26 @@ const Page = () => {
             <CardTitle className="text-2xl font-bold text-center">Chat Room: {room}</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit}>
-              <input placeholder='msg here' onChange={(e) => setNewMessage(e.target.value)} value={newMessage} />
-              <button>send</button>
+          <div>
+            {messages.map((message) => (
+              <div key={message.id}>
+                <span className='font-semibold'>{message.user}</span>{" "}
+                {message.text}
+              </div>
+            ))}
+          </div>
+          <form onSubmit={handleSubmit} className="flex items-center space-x-2 p-4 bg-white border-t">
+              <Input
+                type="text"
+                placeholder="Type your message here..."
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                className="flex-grow"
+              />
+              <Button type="submit" size="icon" disabled={!newMessage.trim()}>
+                <SendIcon className="h-4 w-4" />
+                <span className="sr-only">Send message</span>
+              </Button>
             </form>
           </CardContent>
         </Card>
